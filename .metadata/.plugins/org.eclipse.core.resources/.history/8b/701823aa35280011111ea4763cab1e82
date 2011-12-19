@@ -1,0 +1,71 @@
+import java.util.Scanner;
+
+/**
+ * This Class provides a method to create a new LoadOperation. It implements the Factory
+ * interface.
+ * 
+ * @version 8
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class LoadFactory implements Factory {
+
+	/**
+	 * Default constructor creates a new LoadFactory.
+	 */
+	public LoadFactory() {
+	}
+
+	/**
+	 * This method reads the two required parameter for a Loadperation and creates a new
+	 * LoadOperation.
+	 * 
+	 * @param scanner
+	 *            The Scanner to use for reading parameters
+	 * @return A new ClearOperation
+	 * @throws FactoryException
+	 *             Thrown if there are too few parameters or parameters with a wrong type
+	 */
+	public Operation create(Scanner scanner) throws FactoryException {
+
+		if(scanner.hasNext()) {
+			
+			String endStr = scanner.next();
+			
+			String loadImage = "";
+			boolean eof = false;
+			while(!eof) {
+				if(scanner.hasNext()) {
+					
+					String line = scanner.next();
+					
+					// Check if it is the end string
+					if(line.equals(endStr)) {
+						eof = true;
+						
+					} else {
+						// add the line
+						loadImage += line + '\n';
+							
+					}
+				} else {
+					eof = true;
+				}
+			}
+			
+			// check if the load operation was valid
+			try {
+				// place a copy of the image in the stack
+				imgStack.push(new AsciiImage(img));
+				
+				// perform replace operation
+				img = new LoadOperation(loadImage).execute(img);
+			} catch (OperationException e) {
+				errorOperationFailed = true;
+			}
+		
+		return new LoadOperation();
+
+	}
+
+}

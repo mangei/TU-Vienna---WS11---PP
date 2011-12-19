@@ -1,0 +1,66 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
+/**
+ * Median Operation
+ * 
+ * @version 9
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class MedianOperation extends FilterOperation {
+
+	/**
+	 * Creates a new MedianOperation.
+	 */
+	public MedianOperation() {
+	}
+	
+	/**
+	 * führt mit dem übergebenen Block den Medianfilter aus. Die Pixel des Blocks werden 
+	 * nach ihrem Helligkeitswert sortiert. Der Median (also das in der sortierten Liste 
+	 * in der Mitte stehende Zeichen) für diesen Block wird als Ergebnis zurückgegeben.
+	 * 
+	 * @param values block
+	 * @return Medianwert
+	 */
+	public int filter(int[] values) {
+		
+		List<Integer> pixelList = new ArrayList<Integer>();
+		for(int i : values) {
+			pixelList.add(i);
+		}
+		
+		// order list
+		Collections.sort(pixelList, new MedianPixelComparator());
+		
+		// return center pixel
+		return pixelList.get(4);
+	}
+	
+	/**
+	 * Comparator to sort the median pixel list.
+	 * 
+	 * @version 7
+	 * @author Manuel Geier (1126137)
+	 *
+	 */
+	private class MedianPixelComparator implements Comparator<Integer> {
+
+		@Override
+		public int compare(Integer i1, Integer i2) {
+
+			if(i1 < i2) {
+				return -1;
+			} else if(i1 > i2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		
+	}
+}

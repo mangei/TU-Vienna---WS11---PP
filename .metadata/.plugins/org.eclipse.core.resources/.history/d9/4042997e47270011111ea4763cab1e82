@@ -1,0 +1,9 @@
+
+public class AsciiStackNode {
+	
+	private AsciiImage image;
+	private AsciiStackNode next;
+	
+	
+	
+}
