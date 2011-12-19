@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * This Class provides a method to replace all occurrences of a specified char by another specified
+ * char. It implements the Operation interface.
+ * 
+ * @version 7
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class LoadOperation implements Operation {
+
+	private String data;
+	
+	/**
+	 * erzeugt eine neue LoadOperation mit den entsprechenden Bilddaten. Diese Bilddaten 
+	 * liegen als String vor, wobei die Bildzeilen durch Zeilenumbrüche (‘\n’) getrennt sind.
+	 * @param data
+	 */
+	public LoadOperation(String data) {
+		this.data = data;
+	}
+
+	/**
+	 * Gibt ein neues AsciiImage zurück, das von Größe und Zeichensatz dem übergebenen AsciiImage 
+	 * entspricht und in das die Daten geladen wurden. Tritt beim Laden ein Fehler auf (zu wenige 
+	 * oder zu viele Daten bzw. ungültige Zeichen), so wird eine OperationException mit einer 
+	 * entsprechenden Fehlermeldung geworfen.
+	 * 
+	 * @param img
+	 *            The AsciiImage to use as basis for executing the Operation, it will remain
+	 *            unchanged
+	 * @return A new AsciiImage reflecting the result of the executed Operation
+	 * @throws OperationException
+	 *         	  Tritt beim Laden ein Fehler auf (zu wenige oder zu viele Daten bzw. ungültige 
+	 *            Zeichen), so wird eine OperationException mit einer entsprechenden Fehlermeldung 
+	 *            geworfen.
+	 */
+	public AsciiImage execute(AsciiImage img) throws OperationException {
+
+		int imgHeight = img.getHeight();
+		
+		// check columns and rows
+		Scanner sc = new Scanner(data);
+		
+		int rowCount = 1;
+		while(sc.hasNext()) {
+			
+			String line = sc.next();
+			
+			
+			
+		}
+		
+		AsciiImage result = new AsciiImage(img);
+
+		ArrayList<AsciiPoint> region = img.getPointList(oldChar);
+		for (AsciiPoint p : region) {
+			result.setPixel(p, newChar);
+		}
+
+		return result;
+
+	}
+
+}

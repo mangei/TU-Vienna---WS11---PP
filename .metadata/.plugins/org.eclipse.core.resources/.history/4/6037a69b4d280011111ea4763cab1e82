@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+
+/**
+ * Diese Klasse glättet ein Bild mit einem 3x3-Mittelwertfilter.
+ * 
+ * @version 7
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class AverageOperation implements Operation {
+
+	/**
+	 * Creates a new MedianOperation.
+	 */
+	public AverageOperation() {
+	}
+
+	/**
+	 * führt mit dem übergebenen Block den Mittelwertfilter aus. Dafür wird das arithmetische 
+	 * Mittel (vgl. Arithmetisches_Mittel) der Helligkeitswerte bestimmt. Das Ergebnis wird 
+	 * mathematisch gerundet und als Ergebnis für diesen Block zurückgegeben.
+	 * 
+	 * @param values
+	 * @return
+	 */
+	public int filter(int[] values) {
+	}

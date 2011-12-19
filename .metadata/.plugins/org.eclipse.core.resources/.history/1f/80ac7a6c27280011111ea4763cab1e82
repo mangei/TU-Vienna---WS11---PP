@@ -1,0 +1,58 @@
+
+/**
+ * Transpose Operation
+ * 
+ * @version 7
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class TransposeOperation implements Operation {
+
+	
+	/**
+	 * Creates a new TransposeOperation.
+	 */
+	public TransposeOperation() {
+	}
+	
+	/**
+	 * Executes this TransposeOperation and returns as new AsciiImage.
+	 * 
+	 * @param img
+	 *            The AsciiImage to use as basis for executing the Operation, it will remain
+	 *            unchanged
+	 * @return A new AsciiImage reflecting the result of the executed Operation
+	 */
+	public AsciiImage execute(AsciiImage img) {
+
+		String charset = img.getCharset();
+		char brightestChar = charset.charAt(charset.length()-1);
+
+		AsciiImage result = new AsciiImage(img);
+
+		// swap width and height for the new image
+		int newImageHeight = img.getWidth();
+		int newImageWidth = img.getHeight();
+		
+		// create the new image
+		char[][] newImage = new char[newImageHeight][newImageWidth];
+	
+		// Transpose
+		for(int y=0; y < imageHeight; y++) {
+			for(int x=0; x < imageWidth; x++) {
+				newImage[x][y] = image[y][x];
+			}
+		}
+		
+		// set new image
+		image = newImage;
+		
+		// set new width and height
+		imageHeight = newImageHeight;
+		imageWidth = newImageWidth;
+
+		return result;
+
+	}
+
+}

@@ -1,0 +1,44 @@
+
+/**
+ * Fill Operation
+ * 
+ * @version 7
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class LineOperation implements Operation {
+
+	
+	/**
+	 * Creates a new LineOperation.
+	 */
+	public LineOperation() {
+	}
+	
+	/**
+	 * Executes this LineOperation and returns as new AsciiImage.
+	 * 
+	 * @param img
+	 *            The AsciiImage to use as basis for executing the Operation, it will remain
+	 *            unchanged
+	 * @return A new AsciiImage reflecting the result of the executed Operation
+	 */
+	public AsciiImage execute(AsciiImage img) {
+
+		String charset = img.getCharset();
+		char brightestChar = charset.charAt(charset.length()-1);
+
+		AsciiImage result = new AsciiImage(img);
+
+		// clear all pixels
+		for (int y = 0; y < result.getHeight(); y++) {
+			for (int x = 0; x < result.getWidth(); x++) {
+				result.setPixel(x, y, brightestChar);
+			}
+		}
+
+		return result;
+
+	}
+
+}

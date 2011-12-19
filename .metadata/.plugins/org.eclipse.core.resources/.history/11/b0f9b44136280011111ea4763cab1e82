@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+/**
+ * This Class provides a method to create a new ClearOperation. It implements the Factory
+ * interface.
+ * 
+ * @version 8
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class ClearFactory implements Factory {
+
+	/**
+	 * Default constructor creates a new ClearFactory.
+	 */
+	public ClearFactory() {
+	}
+
+	/**
+	 * This method reads the two required parameter for a ReplaceOperation and creates a new
+	 * ReplaceOperation.
+	 * 
+	 * @param scanner
+	 *            The Scanner to use for reading parameters
+	 * @return A new ClearOperation
+	 * @throws FactoryException
+	 *             Thrown if there are too few parameters or parameters with a wrong type
+	 */
+	public Operation create(Scanner scanner) throws FactoryException {
+
+		return new ClearOperation();
+
+	}
+
+}

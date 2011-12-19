@@ -1,0 +1,91 @@
+import java.util.Scanner;
+
+/**
+ * This Class provides a method to replace all occurrences of a specified char by another specified
+ * char. It implements the Operation interface.
+ * 
+ * @version 7
+ * @author Manuel Geier (1126137)
+ * 
+ */
+public class BinaryOperation implements Operation {
+
+	private char threshold;
+	
+	/**
+	 * erzeugt eine neue BinaryOperation mit dem entsprechenden Schwellwert.
+	 * 
+	 * @param threshold Schwellwert
+	 */
+	public BinaryOperation(char threshold) {
+		this.threshold = threshold;
+	}
+
+	/**
+	 * gibt ein neues AsciiImage zurück, das das Binärbild des übergebenen AsciiImage ist. 
+	 * Zur Umwandlung in ein Binärbild werden alle Zeichen, die im Zeichensatz des Bildes 
+	 * vor dem Schwellwert kommen, auf das dunkelste Zeichen gesetzt, alle Zeichen ab dem 
+	 * Schwellwert werden auf das hellste Zeichen gesetzt. Sollte das Schwellwertzeichen 
+	 * nicht im Zeichensatz des AsciiImage vorkommen, so wird eine OperationException geworfen.
+	 * 
+	 * @param img
+	 *            The AsciiImage to use as basis for executing the Operation, it will remain
+	 *            unchanged
+	 * @return A new AsciiImage reflecting the result of the executed Operation
+	 * @throws OperationException
+	 *         	  Tritt beim Laden ein Fehler auf (zu wenige oder zu viele Daten bzw. ungültige 
+	 *            Zeichen), so wird eine OperationException mit einer entsprechenden Fehlermeldung 
+	 *            geworfen.
+	 */
+	public AsciiImage execute(AsciiImage img) throws OperationException {
+
+		String charset = img.getCharset();
+		int thresholdIdx = charset.indexOf(threshold);
+		
+		if(thresholdIdx == -1) {
+			throw new OperationException("threshold not in charset");
+		}
+		
+		// check image height and width
+		Scanner sc = new Scanner(data);
+		
+		int rowCount = 0;
+		while(sc.hasNext()) {
+			
+			if(++rowCount > imgHeight) {
+				throw new OperationException("loaded image does not match the origin image height: " + rowCount + " instead of " + imgHeight);
+			}
+			
+			int l = sc.next().length();
+			if(l != imgWidth) {
+				throw new OperationException("loaded image does not match the origin image width: " + l + " instead of " + imgWidth);
+			}
+			
+		}
+		
+		// check image height
+		if(rowCount < imgHeight) {
+			throw new OperationException("loaded image does not match the origin image height: " + rowCount + " instead of " + imgHeight);
+		}
+		
+		// check charset
+		for(char c : data.toCharArray()) {
+			if(c != '\n' && charset.indexOf(c) < 0) {
+				throw new OperationException("loaded image does not match the defined charset");
+			}
+		}
+		
+		AsciiImage result = new AsciiImage(img);
+
+		// set the new image pixel data
+		for (int y = 0; y < img.getHeight(); y++) {
+			for (int x = 0; x < img.getWidth(); x++) {
+				result.setPixel(x, y, data.charAt((imgWidth + 1) * y + x));
+			}
+		}
+
+		return result;
+
+	}
+
+}
