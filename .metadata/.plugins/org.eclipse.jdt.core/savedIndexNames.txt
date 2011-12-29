@@ -1,5 +1,0 @@
-INDEX VERSION 1.126+C:\Dokumente und Einstellungen\ManuelG\Desktop\Extra\Studium\Semester 1\Programmierpraxis\UE\.metadata\.plugins\org.eclipse.jdt.core
-1252381695.index
-3602445968.index
-822139799.index
-1174924033.index
