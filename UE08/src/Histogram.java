@@ -3,102 +3,119 @@ import java.util.HashMap;
 /**
  * Histogram
  * 
- * HINWEIS: NICHT FERTIG PROGRAMMIERT
- * 
  * @author Manuel Geier (1126137)
  * @version 8
  *
  */
 public class Histogram {
 
-	private static String charsetBasic = "0123456789#.";
+	private static final char BAR_CHAR = '#';
+	private static final char BACKGROUND_CHAR = '.';
+	private static final String HISTOGRAM_BASIC_CHARSET = "0123456789" + BAR_CHAR + BACKGROUND_CHAR;
+	private static final int VALUE_LABEL_WIDTH = 3;
+	private static final int HISTOGRAM_IMAGE_HEIGHT = 16;
+	private static final int HISTOGRAM_BAR_HEIGHT = HISTOGRAM_IMAGE_HEIGHT - 1;
 	
+	/**
+	 * Returns a histogram from the image
+	 * @param img image basis for the histogram
+	 * @return histogram image
+	 */
 	public static AsciiImage getHistogram(AsciiImage img) {
 		
-		String charsetExt = mergeCharset(charsetBasic, img.getCharset());
+		// image char count
+		int imageCharCount = img.getHeight() * img.getWidth();
 		
-		// New histogram image
-		AsciiImage histoImg = new AsciiImage(3 + img.getCharset().length(), 16, charsetExt);
+		// combine the histogram charset with the image charset
+		String histogramCharset = mergeCharset(HISTOGRAM_BASIC_CHARSET, img.getCharset());
 		
-		// Store the occourences of the characters
-		HashMap<Character, Integer> histoMap = new HashMap<Character, Integer>();
+		// new histogram image
+		AsciiImage histogramImage = new AsciiImage(VALUE_LABEL_WIDTH + img.getCharset().length(), HISTOGRAM_IMAGE_HEIGHT, histogramCharset);
+		
+		// store the occourences of the characters in a map
+		HashMap<Character, Integer> imageCharOccourenceMap = new HashMap<Character, Integer>();
 		
 		
-		// Draw bottom labels and initialize the map
-		char[] chArr = img.getCharset().toCharArray();
-		for(int i = 0, l = chArr.length; i < l; i++) {
+		// draw bottom labels and initialize the map
+		char[] imageCharset = img.getCharset().toCharArray();
+		for(int i = 0, l = imageCharset.length; i < l; i++) {
 			
-			histoImg.setPixel(3+i, 15, chArr[i]);
-			histoMap.put(chArr[i], 0);
+			histogramImage.setPixel(VALUE_LABEL_WIDTH + i, HISTOGRAM_BAR_HEIGHT, imageCharset[i]);
+			imageCharOccourenceMap.put(imageCharset[i], 0);
 			
 		}
 		
-		// calculate occourences
+		
+		// calculate occourences and store the maximum occourence value
 		int maxOccourence = 0;
 		for(int y = 0, h = img.getHeight(); y < h; y++) {
 			for(int x = 0, w = img.getWidth(); x < w; x++) {
-				Character ch = img.getPixel(x, y);
-				int newValue = histoMap.get(ch) + 1;
-				histoMap.put(ch, newValue);
 				
+				// get the character
+				Character ch = img.getPixel(x, y);
+				
+				// increase the count of the character
+				int newValue = imageCharOccourenceMap.get(ch) + 1;
+				imageCharOccourenceMap.put(ch, newValue);
+				
+				// store the max occourence value
 				if(newValue > maxOccourence) {
 					maxOccourence = newValue;
 				}
-				
 			}
 		}
 		
-		/**
-		 * percPerRow: list, which contains all values per row in percent
-		 * maxOccourence: max occourence of a character
-		 * maxOccourencedPerc: max occourence of a character in percent
-		 * 
-		 */
-		double maxOccourencedPerc = maxOccourence * 100 / (img.getHeight()*img.getWidth());
-		double step = maxOccourencedPerc / 16d;
 		
-		double[] percPerRow = new double[16];
+		// max occourence of a character in percent
+		double maxOccourencedPerc = maxOccourence * 100 / imageCharCount;
 		
-		// draw step labels
+		// step between two values
+		double step = maxOccourencedPerc / (double) HISTOGRAM_BAR_HEIGHT;
+		
+		// list, which contains all values per row in percent
+		double[] percPerRow = new double[HISTOGRAM_BAR_HEIGHT];
+		
+		
+		// calculate the steps and store the value
 		double maxOccourenceStepPerc = maxOccourencedPerc;
-		for(int y = 0; y < 16; y++) {
+		for(int y = 0; y < HISTOGRAM_BAR_HEIGHT; y++) {
 		
 			percPerRow[y] = maxOccourenceStepPerc;
 			maxOccourenceStepPerc -= step;
 		}
 		
-		for(int y = 0; y < 16; y+=2) {
-			
-			System.out.println(percPerRow[y]);
+		
+		// draw occourence value labels
+		for(int y = 0; y < HISTOGRAM_BAR_HEIGHT; y+=2) {
 
+			// round the value and 
 			int rowValue = (int) Math.round(percPerRow[y]);
+			char[] rowValueArr = Integer.toString(rowValue).toCharArray();
 			
-			if(rowValue >= 100) {
-				histoImg.setPixel(0, y, (""+rowValue).charAt((""+rowValue).length()-3));
-			}
-			if(rowValue >= 10) {
-				histoImg.setPixel(1, y, (""+rowValue).charAt((""+rowValue).length()-2));
-			}
-			if(rowValue >= 1) {
-				histoImg.setPixel(2, y, (""+rowValue).charAt((""+rowValue).length()-1));
-			}
-			
-			maxOccourenceStepPerc -= step * 2;
-		}
-		
-		
-		// draw histo bars
-		for(int i = 0, l = chArr.length; i < l; i++) {
-			
-			int histoVal = histoMap.get(chArr[i]);
-			
-			for(int y = 15; y >= 0 && histoVal >= 0; y--) {
-				histoImg.setPixel(3+i, y, '#');
-				histoVal -= step;
+			// draw digits right aligned
+			for(int i = VALUE_LABEL_WIDTH-1, j = rowValueArr.length-1; i >= 0 && j >= 0; i--, j--) {
+				histogramImage.setPixel(i, y, rowValueArr[j]);
 			}
 		}
 		
-		return histoImg;
+		
+		// draw histogram bars for each image char
+		for(int i = 0, l = imageCharset.length; i < l; i++) {
+			
+			// get the calculated value out of the map
+			int imageCharOccourenceValue = imageCharOccourenceMap.get(imageCharset[i]);
+			
+			// calculate percent
+			double imageCharOccourenceValuePercent = imageCharOccourenceValue * 100.0 / imageCharCount;
+			
+			// draw the bar
+			for(int y = HISTOGRAM_BAR_HEIGHT-1; y >= 0 && imageCharOccourenceValuePercent > 0.0; y--, imageCharOccourenceValuePercent -= step) {
+				histogramImage.setPixel(VALUE_LABEL_WIDTH + i, y, BAR_CHAR);
+			}
+		}
+		
+		
+		return histogramImage;
 	}
 	
 	/**

@@ -12,11 +12,11 @@ Exercises
 * UE06
 * UE07
 * UE08
+ with bonus (+2 points)
 * UE09
 * UE10
 
 All done! Every exercies passes all tests! 100% score!  
-(Bonus exercises will follow...)
 
 Links
 -----
