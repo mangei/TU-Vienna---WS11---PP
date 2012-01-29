@@ -4,10 +4,13 @@ by _Manuel Geier_
 
 Exercises
 ---------
+(exercises 04 - 10 are easy to open Eclipse projects)  
+
 * UE01
 * UE02
 * UE03
 * UE04
+ with bonus (0,5 points)
 * UE05
 * UE06
  with bonus (+1 point)
@@ -18,7 +21,6 @@ Exercises
 * UE10
 
 All done! Every exercies passes all tests! 100% score!  
-(exercises 05 - 10 are easy to open Eclipse projects)
 
 Links
 -----
